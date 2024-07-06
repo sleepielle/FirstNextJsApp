@@ -1,11 +1,13 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import styles from "@/app/page.module.css";
 import Link from "next/link";
 
 function AddPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const router = useRouter(); // Initialize useRouter
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -15,28 +17,49 @@ function AddPost() {
     setContent(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      fetch("/api/add-post", {
+      const response = await fetch("/api/post/add-post", {
         method: "POST",
         headers: {
           "content-type": "application/json",
         },
         body: JSON.stringify({ title, content }),
       });
+      if (response.ok) {
+        // Redirect after successful submission
+        console.log("pushing...");
+        router.push("/"); // Change '/posts' to your target path
+      } else {
+        console.error("Failed to submit post");
+      }
     } catch (error) {
-      console.log(error);
+      console.error("Error submitting post:", error);
     }
+  };
 
-    setTitle();
-    setContent();
+  const viewFeed = (e) => {
+    router.push("/");
   };
 
   return (
     <div className={styles.main}>
       <h1>Add New Post</h1>
+      <button
+        type="submit"
+        onClick={viewFeed}
+        style={{
+          width: "300px",
+          padding: "10px",
+          backgroundColor: "grey",
+          textAlign: "center",
+        }}
+      >
+        {" "}
+        View Feed
+      </button>
       <form action="" onSubmit={handleSubmit}>
         <div
           style={{
