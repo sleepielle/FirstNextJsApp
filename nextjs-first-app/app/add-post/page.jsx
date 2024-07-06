@@ -20,7 +20,8 @@ function AddPost() {
     e.preventDefault();
 
     try {
-      await fetch("/api/post/add-post", {
+      // Step 1: Send POST request to add the new post
+      const response = await fetch("/api/post/add-post", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -28,12 +29,18 @@ function AddPost() {
         body: JSON.stringify({ title, content }),
       });
 
+      if (!response.ok) {
+        throw new Error("Failed to add post");
+      }
+
+      // Step 2: Refresh router to update state
+
+      // Optionally, you can push to a different route if needed
+      router.push("/");
       router.refresh();
     } catch (error) {
       console.error("Error submitting post:", error);
     }
-
-    router.push("/");
   };
 
   const viewFeed = () => {
