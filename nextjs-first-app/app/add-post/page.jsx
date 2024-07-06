@@ -1,13 +1,43 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "@/app/page.module.css";
 import Link from "next/link";
 
 function AddPost() {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    try {
+      fetch("/api/add-post", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ title, content }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    setTitle();
+    setContent();
+  };
+
   return (
     <div className={styles.main}>
       <h1>Add New Post</h1>
-      <form action="">
+      <form action="" onSubmit={handleSubmit}>
         <div
           style={{
             display: "flex",
@@ -27,6 +57,7 @@ function AddPost() {
             {" "}
             <label htmlFor="title">Title New Post</label>
             <input
+              onChange={handleTitleChange}
               style={{ height: "50px", width: "300px", margin: "10px" }}
               type="text"
             />
@@ -43,12 +74,13 @@ function AddPost() {
             {" "}
             <label htmlFor="content">Content New Post</label>
             <input
+              onChange={handleContentChange}
               style={{ height: "100px", width: "300px", margin: "10px" }}
               type="text"
             />
           </div>
-          <Link
-            href="/"
+          <button
+            type="submit"
             style={{
               width: "300px",
               padding: "10px",
@@ -57,7 +89,7 @@ function AddPost() {
             }}
           >
             Add New Post
-          </Link>
+          </button>
         </div>
       </form>
     </div>
