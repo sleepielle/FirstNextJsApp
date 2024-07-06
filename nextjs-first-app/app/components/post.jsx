@@ -1,5 +1,5 @@
 import React from "react";
-
+import DeletePostButton from "./DeletePostButton";
 function Post({ id, title, content, authorName }) {
   return (
     <div
@@ -29,8 +29,7 @@ function Post({ id, title, content, authorName }) {
           width: "150px",
         }}
       >
-        {" "}
-        <button style={{ width: "100px", height: "50px" }}>Delete</button>
+        <DeletePostButton postId={id} />
       </div>
     </div>
   );

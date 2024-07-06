@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter
 import styles from "@/app/page.module.css";
-import Link from "next/link";
 
 function AddPost() {
   const [title, setTitle] = useState("");
@@ -21,26 +20,23 @@ function AddPost() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/post/add-post", {
+      await fetch("/api/post/add-post", {
         method: "POST",
         headers: {
           "content-type": "application/json",
         },
         body: JSON.stringify({ title, content }),
       });
-      if (response.ok) {
-        // Redirect after successful submission
-        console.log("pushing...");
-        router.push("/"); // Change '/posts' to your target path
-      } else {
-        console.error("Failed to submit post");
-      }
+
+      router.refresh();
     } catch (error) {
       console.error("Error submitting post:", error);
     }
+
+    router.push("/");
   };
 
-  const viewFeed = (e) => {
+  const viewFeed = () => {
     router.push("/");
   };
 
@@ -48,7 +44,6 @@ function AddPost() {
     <div className={styles.main}>
       <h1>Add New Post</h1>
       <button
-        type="submit"
         onClick={viewFeed}
         style={{
           width: "300px",
@@ -57,10 +52,9 @@ function AddPost() {
           textAlign: "center",
         }}
       >
-        {" "}
         View Feed
       </button>
-      <form action="" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div
           style={{
             display: "flex",
@@ -77,12 +71,12 @@ function AddPost() {
               margin: "30px",
             }}
           >
-            {" "}
-            <label htmlFor="title">Title New Post</label>
+            <label>Title New Post</label>
             <input
               onChange={handleTitleChange}
               style={{ height: "50px", width: "300px", margin: "10px" }}
               type="text"
+              value={title}
             />
           </div>
 
@@ -94,12 +88,12 @@ function AddPost() {
               margin: "30px",
             }}
           >
-            {" "}
-            <label htmlFor="content">Content New Post</label>
+            <label>Content New Post</label>
             <input
               onChange={handleContentChange}
               style={{ height: "100px", width: "300px", margin: "10px" }}
               type="text"
+              value={content}
             />
           </div>
           <button
