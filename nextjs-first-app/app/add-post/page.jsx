@@ -18,9 +18,7 @@ function AddPost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      // Step 1: Send POST request to add the new post
       const response = await fetch("/api/post/add-post", {
         method: "POST",
         headers: {
@@ -33,9 +31,6 @@ function AddPost() {
         throw new Error("Failed to add post");
       }
 
-      // Step 2: Refresh router to update state
-
-      // Optionally, you can push to a different route if needed
       router.push("/");
       router.refresh();
     } catch (error) {
